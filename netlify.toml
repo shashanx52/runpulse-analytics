@@ -1,0 +1,18 @@
+# Netlify build configuration.
+#
+# The Next.js runtime turns the App Router route handlers into Netlify Functions and
+# serves the rest from the CDN. The data CSVs and the model bundle are pulled into each
+# function through outputFileTracingIncludes in next.config.mjs, so the handlers can read
+# them from disk at request time.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # next build needs more than the default heap for a dataset this size
+  NODE_OPTIONS = "--max-old-space-size=4096"
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
