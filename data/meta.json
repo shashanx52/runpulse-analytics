@@ -1,0 +1,46 @@
+{
+  "generated_from": "scripts/generate.mjs",
+  "seed": 20260823,
+  "season": {
+    "start": "2026-03-01",
+    "end": "2026-08-19",
+    "days": 172,
+    "event_date": "2026-08-23"
+  },
+  "rows": {
+    "funnel_daily": 76453,
+    "meta_ads_daily": 23892,
+    "google_ads_daily": 9504,
+    "linkedin_ads_daily": 3480,
+    "print_ads_daily": 128,
+    "sessions": 79996,
+    "ticket_products": 8
+  },
+  "totals": {
+    "landed": 2791339,
+    "leads": 324087,
+    "conv": 72325,
+    "gtv": 134037323,
+    "spend": 27306607,
+    "roas": 4.91
+  },
+  "planted_incidents": {
+    "leadOutage": {
+      "from": "2026-05-18",
+      "to": "2026-05-20",
+      "channel": "google",
+      "leadMult": 0.34
+    },
+    "botSpike": {
+      "from": "2026-06-25",
+      "to": "2026-07-02",
+      "channel": "organic",
+      "city": "Hyderabad",
+      "landMult": 2.3
+    },
+    "spendRestate": {
+      "days": 3,
+      "mult": 0.94
+    }
+  }
+}
