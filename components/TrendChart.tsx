@@ -69,21 +69,34 @@ export default function TrendChart({
   }, [data, bars, lines]);
 
   const needRight = lines.some((l) => l.yAxis === "right");
+  // Recharts uses `name` for both the legend entry and the tooltip key, so series are
+  // named by their human label and the unit lookup is keyed the same way.
   const unitOf = useMemo(() => {
     const m: Record<string, string> = {};
-    for (const b of bars) m[b.key] = b.unit ?? "count";
-    for (const l of lines) m[l.key] = l.unit ?? "count";
-    return m;
-  }, [bars, lines]);
-  const labelOf = useMemo(() => {
-    const m: Record<string, string> = {};
-    for (const b of bars) m[b.key] = b.label;
-    for (const l of lines) m[l.key] = l.label;
+    for (const b of bars) m[b.label] = b.unit ?? "count";
+    for (const l of lines) m[l.label] = l.unit ?? "count";
     return m;
   }, [bars, lines]);
 
   // 172 points is too many for one tick each; thin them so labels never collide
   const interval = Math.max(0, Math.ceil(data.length / 12) - 1);
+
+  // fmtNum rounds to whole units, which is right for counts and useless for a chart of
+  // regression coefficients: 0.95, 0.50 and 0.26 all render as "1" or "0". Pick the axis
+  // precision from the magnitude actually present.
+  const axisFmt = useMemo(() => {
+    const keys = [...bars.map((b) => b.key), ...lines.map((l) => l.key)];
+    let max = 0;
+    for (const d of data) {
+      for (const k of keys) {
+        const v = d[k];
+        if (typeof v === "number" && isFinite(v)) max = Math.max(max, Math.abs(v));
+      }
+    }
+    if (max < 10) return (v: number) => v.toFixed(2);
+    if (max < 100) return (v: number) => v.toFixed(1);
+    return (v: number) => fmtNum(v);
+  }, [data, bars, lines]);
 
   if (nothing) {
     return (
@@ -111,7 +124,7 @@ export default function TrendChart({
             />
             <YAxis
               yAxisId="left"
-              tickFormatter={(v: number) => fmtNum(v)}
+              tickFormatter={axisFmt}
               tick={{ fill: theme.MUTED, fontSize: 11 }}
               stroke={theme.AXIS}
               width={54}
@@ -120,7 +133,7 @@ export default function TrendChart({
               <YAxis
                 yAxisId="right"
                 orientation="right"
-                tickFormatter={(v: number) => fmtNum(v)}
+                tickFormatter={(v: number) => (Math.abs(v) < 10 ? v.toFixed(2) : fmtNum(v))}
                 tick={{ fill: theme.MUTED, fontSize: 11 }}
                 stroke={theme.AXIS}
                 width={48}
@@ -137,7 +150,7 @@ export default function TrendChart({
               labelFormatter={(v: string) => fmtDay(String(v))}
               formatter={(v: number | string, n: string) => [
                 fmtByUnit(typeof v === "number" ? v : Number(v), unitOf[n] ?? "count"),
-                labelOf[n] ?? n,
+                n,
               ]}
             />
             <Legend
@@ -164,7 +177,7 @@ export default function TrendChart({
                 key={b.key}
                 yAxisId="left"
                 dataKey={b.key}
-                name={b.key}
+                name={b.label}
                 stackId={b.stackId}
                 fill={b.color ?? theme.CAT[i % theme.CAT.length]}
                 radius={[3, 3, 0, 0]}
@@ -178,7 +191,7 @@ export default function TrendChart({
                 yAxisId={l.yAxis ?? "left"}
                 type="monotone"
                 dataKey={l.key}
-                name={l.key}
+                name={l.label}
                 stroke={l.color ?? theme.CAT[(bars.length + i) % theme.CAT.length]}
                 strokeWidth={2}
                 strokeDasharray={l.dashed ? "5 4" : undefined}

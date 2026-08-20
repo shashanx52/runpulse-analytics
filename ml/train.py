@@ -203,9 +203,12 @@ def fit_propensity(sessions: pd.DataFrame, target: str) -> Dict[str, Any]:
     X_tr, y_tr = X_all[mask_tr], y_all[mask_tr]
     X_te, y_te = X_all[~mask_tr], y_all[~mask_tr]
 
-    clf = LogisticRegression(
-        max_iter=3000, class_weight="balanced", C=1.0, random_state=SEED, solver="lbfgs"
-    )
+    # No class_weight, deliberately. Balancing a 3% positive rate shifts the intercept so
+    # far that predicted probabilities average 48% against an actual 3.5% -- the ranking is
+    # fine but every probability the UI shows is nonsense, and the Brier score goes from
+    # 0.033 to 0.244. Unweighted costs 0.0016 of AUC and gives calibrated output, which is
+    # the better trade when the model is surfaced to a human as a percentage.
+    clf = LogisticRegression(max_iter=3000, C=1.0, random_state=SEED, solver="lbfgs")
     clf.fit(X_tr, y_tr)
     p_te = clf.predict_proba(X_te)[:, 1]
 

@@ -19,20 +19,26 @@ export default function FunnelChart({ totals, height }: { totals: Derived; heigh
 
   return (
     <div style={height ? { minHeight: height } : undefined}>
-      {stages.map((s, i) => (
+      {stages.map((s, i) => {
+        const pct = Math.max(2, (s.v / top) * 100);
+        // A narrow bar cannot hold its own label without clipping it, so below roughly a
+        // fifth of the width the number sits outside the bar instead.
+        const inside = pct > 18;
+        return (
         <div key={s.label}>
           <div className="fn-row">
             <div className="fn-lab">{s.label}</div>
             <div
               className="fn-bar"
-              style={{
-                // share of the widest stage, floored so a tiny stage is still visible
-                width: Math.max(2, (s.v / top) * 100) + "%",
-                background: theme.FUNNEL[i],
-              }}
+              style={{ width: pct + "%", background: theme.FUNNEL[i] }}
             >
-              {fmtInt(s.v)}
+              {inside ? fmtInt(s.v) : null}
             </div>
+            {inside ? null : (
+              <div style={{ fontSize: 12, fontWeight: 620, color: "var(--ink)" }}>
+                {fmtInt(s.v)}
+              </div>
+            )}
           </div>
           {i < steps.length ? (
             <div className="fn-step">
@@ -40,7 +46,8 @@ export default function FunnelChart({ totals, height }: { totals: Derived; heigh
             </div>
           ) : null}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

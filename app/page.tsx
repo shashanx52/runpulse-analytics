@@ -53,7 +53,25 @@ export default function Page() {
   const [err, setErr] = useState<string | null>(null);
   const [booted, setBooted] = useState(false);
 
-  const [view, setView] = useState("overall");
+  // The active view lives in the URL hash, so a view is linkable and the back button
+  // works. Reading it during render would disagree with the server-rendered HTML, so the
+  // hash is picked up after mount instead.
+  const [view, setViewState] = useState("overall");
+  useEffect(() => {
+    const fromHash = () => {
+      const h = window.location.hash.replace(/^#/, "");
+      if (h && VIEWS.some((v) => v.key === h)) setViewState(h);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
+  }, []);
+  const setView = useCallback((k: string) => {
+    setViewState(k);
+    if (typeof window !== "undefined" && window.location.hash !== "#" + k) {
+      window.history.pushState(null, "", "#" + k);
+    }
+  }, []);
   const [period, setPeriod] = useState<Period>("All time");
   const [custom, setCustom] = useState({ start: "", end: "" });
   const [city, setCity] = useState("All cities");

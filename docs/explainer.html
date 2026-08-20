@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RunPulse Analytics — Project Guide</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0; font-family: "Segoe UI", -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 10.2pt; line-height: 1.55; color: #17212b; background: #fff;
+  }
+  h1 { font-size: 25pt; letter-spacing: -.02em; margin: 0 0 4px; }
+  h2 {
+    font-size: 15pt; margin: 26px 0 8px; padding-bottom: 5px;
+    border-bottom: 2px solid #0d9488; color: #0b3a3a; break-after: avoid;
+  }
+  h3 { font-size: 11.6pt; margin: 18px 0 5px; color: #0b3a3a; break-after: avoid; }
+  h4 { font-size: 10.4pt; margin: 13px 0 3px; color: #17212b; break-after: avoid; }
+  p { margin: 0 0 8px; }
+  ul, ol { margin: 0 0 9px; padding-left: 18px; }
+  li { margin-bottom: 3px; }
+  code {
+    font-family: Consolas, "SF Mono", Menlo, monospace; font-size: 8.9pt;
+    background: #eef4f4; padding: 1px 4px; border-radius: 3px; color: #0b4f4a;
+  }
+  pre {
+    font-family: Consolas, Menlo, monospace; font-size: 8.3pt; line-height: 1.45;
+    background: #f5f8f8; border: 1px solid #dbe6e6; border-left: 3px solid #0d9488;
+    border-radius: 4px; padding: 9px 11px; overflow-x: auto; margin: 0 0 10px;
+    white-space: pre; break-inside: avoid;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 9.1pt; margin: 0 0 11px; break-inside: avoid; }
+  th, td { text-align: left; padding: 5px 7px; border-bottom: 1px solid #e2eaea; vertical-align: top; }
+  th { background: #f0f6f6; font-weight: 650; color: #0b3a3a; font-size: 8.6pt;
+       text-transform: uppercase; letter-spacing: .03em; }
+  td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .lede { font-size: 11.4pt; color: #44565f; margin-bottom: 16px; }
+  .cover { padding-top: 42mm; text-align: left; }
+  .cover .brand { font-size: 34pt; font-weight: 680; letter-spacing: -.03em; }
+  .cover .dot { color: #0d9488; }
+  .cover .sub { font-size: 13pt; color: #55676f; margin-top: 6px; }
+  .cover .meta { margin-top: 26mm; font-size: 9.6pt; color: #55676f; line-height: 1.9; }
+  .cover .meta b { color: #17212b; display: inline-block; min-width: 92px; }
+  .page { break-before: page; }
+  .shot { break-inside: avoid; margin: 8px 0 4px; }
+  .shot img {
+    width: 100%; border: 1px solid #cdd9d9; border-radius: 5px; display: block;
+  }
+  .cap { font-size: 8.3pt; color: #6b7d85; margin-top: 4px; }
+  .note {
+    background: #f0f8f7; border-left: 3px solid #0d9488; padding: 8px 11px;
+    margin: 0 0 11px; font-size: 9.5pt; break-inside: avoid;
+  }
+  .warn { background: #fdf6ec; border-left-color: #b4690e; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .kv { font-size: 9.3pt; }
+  .kv b { color: #0b3a3a; }
+  .tag {
+    display: inline-block; background: #0d9488; color: #fff; font-size: 7.6pt;
+    font-weight: 650; padding: 2px 6px; border-radius: 3px; letter-spacing: .04em;
+    text-transform: uppercase; vertical-align: middle; margin-left: 6px;
+  }
+  .toc { font-size: 10pt; }
+  .toc li { margin-bottom: 5px; }
+  .muted { color: #6b7d85; }
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<div class="cover">
+  <div class="brand">RunPulse<span class="dot">.</span></div>
+  <div class="sub">Marketing analytics, forecasting and data-quality platform<br>for a mass-participation running event</div>
+  <div class="meta">
+    <b>Project</b> RunPulse Analytics<br>
+    <b>Live</b> runpulse-bhargavi-aitwade-mit-wpu-capstone.vercel.app<br>
+    <b>Repository</b> github.com/shashanx52/runpulse-analytics<br>
+    <b>Stack</b> Next.js 14 · TypeScript · Recharts · Python / scikit-learn<br>
+    <b>Scope</b> 13 views · 76,453 fact rows · 6 trained models<br>
+    <b>Document</b> Project guide for a first-time reader
+  </div>
+</div>
+
+<!-- ============================ CONTENTS ============================ -->
+<div class="page">
+<h2>Contents</h2>
+<ol class="toc">
+  <li><b>What the project is</b> — the problem it answers</li>
+  <li><b>How to run it</b> — three commands</li>
+  <li><b>Technology map</b> — what is used where, and why</li>
+  <li><b>How data flows</b> — from simulation to screen</li>
+  <li><b>The dataset</b> — files, grain, and what the numbers look like</li>
+  <li><b>The thirteen views</b> — each one, with a screenshot and what it is for</li>
+  <li><b>The models</b> — six of them, with real measured accuracy</li>
+  <li><b>Data quality</b> — the checks, and two faults the system has to catch</li>
+  <li><b>Engineering decisions</b> — four problems and how they were solved</li>
+  <li><b>File map</b> — what every folder and key file does</li>
+  <li><b>Limitations</b> — what this does not prove</li>
+</ol>
+</div>
+
+<!-- ============================ 1 ============================ -->
+<div class="page">
+<h2>1 · What the project is</h2>
+<p class="lede">A working analytics platform for the marketing team of a large city running event, covering a 172-day registration campaign across four paid channels and four earned ones.</p>
+
+<p>An event marketing team has one budget and four weekly questions. Every part of this application maps onto one of them:</p>
+
+<table>
+  <tr><th style="width:32%">The question</th><th>Where it is answered</th></tr>
+  <tr><td><b>Where did the money go, and what came back?</b></td><td>Overall, Marketing Mix, and the four channel views</td></tr>
+  <tr><td><b>Which channel should get the next rupee?</b></td><td>ML Lab — spend response curves and the budget optimiser</td></tr>
+  <tr><td><b>Are these numbers even correct?</b></td><td>Data Quality — reconciliation and fault detection</td></tr>
+  <tr><td><b>How does the season finish?</b></td><td>Forecast — projection to race day with intervals</td></tr>
+</table>
+
+<p>The event is the <b>Velocity Run Series 2026</b>: eight ticket types from a 2 km children's run to a full marathon, sold across six Indian cities, with race day on 23 August 2026. Media runs on Meta, Google, LinkedIn and newspaper print, alongside organic search, email, referral and affiliate traffic.</p>
+
+<h3>Scale of the thing</h3>
+<table>
+  <tr><th>Views</th><th class="r">13</th><th>Fact rows</th><th class="r">76,453</th></tr>
+  <tr><td>Trained models</td><td class="r">6</td><td>Session records</td><td class="r">79,996</td></tr>
+  <tr><td>TypeScript files</td><td class="r">49</td><td>Reporting levels</td><td class="r">22</td></tr>
+  <tr><td>API endpoints</td><td class="r">8</td><td>Campaign season</td><td class="r">172 days</td></tr>
+</table>
+</div>
+
+<!-- ============================ 2 ============================ -->
+<div class="page">
+<h2>2 · How to run it</h2>
+
+<pre>git clone https://github.com/shashanx52/runpulse-analytics
+cd runpulse-analytics
+
+npm install                              # install dependencies
+npm run gen:data                         # build the dataset        ~15 seconds
+pip install -r ml/requirements.txt       # numpy, pandas, sklearn
+npm run train                            # fit the six models      ~60 seconds
+npm run dev                              # http://localhost:3100</pre>
+
+<div class="note">
+The application runs with only <code>npm run gen:data</code>. The training step is needed
+by two views — Forecast and ML Lab — and everything else works without Python installed
+at all.
+</div>
+
+<h3>The AI Analyst view</h3>
+<p>The AI Analyst needs a Google Gemini API key. Create <code>.env.local</code> in the project root:</p>
+<pre>GEMINI_API_KEY=your_key_here</pre>
+<p>Without a key that one view shows a clear message and the other twelve are unaffected. The key is read server-side only and is never sent to the browser.</p>
+
+<h3>Every npm script</h3>
+<table>
+  <tr><th>Command</th><th>What it does</th></tr>
+  <tr><td><code>npm run dev</code></td><td>Development server with hot reload, port 3100</td></tr>
+  <tr><td><code>npm run build</code></td><td>Production build</td></tr>
+  <tr><td><code>npm run start</code></td><td>Serve the production build</td></tr>
+  <tr><td><code>npm run typecheck</code></td><td>TypeScript check, no emit</td></tr>
+  <tr><td><code>npm run gen:data</code></td><td>Run the data simulation, writes <code>data/*.csv</code></td></tr>
+  <tr><td><code>npm run train</code></td><td>Fit the models, writes <code>ml/models/bundle.json</code></td></tr>
+</table>
+</div>
+
+<!-- ============================ 3 ============================ -->
+<div class="page">
+<h2>3 · Technology map — what is used where</h2>
+<p class="lede">Every technology in the project, the exact job it does, and why it was chosen over the obvious alternative.</p>
+
+<table>
+  <tr><th style="width:19%">Technology</th><th style="width:30%">Used for</th><th>Why this one</th></tr>
+  <tr>
+    <td><b>Next.js 14</b><br><span class="muted">App Router</span></td>
+    <td>Page shell, the eight API route handlers, production build</td>
+    <td>One framework serves both the UI and the server endpoints, so the typed row shapes are shared between them instead of being redeclared on each side.</td>
+  </tr>
+  <tr>
+    <td><b>TypeScript</b><br><span class="muted">strict mode</span></td>
+    <td>All 49 source files</td>
+    <td>Every table column and chart series is keyed by a field name. Strict typing turns a renamed field into a build error instead of a blank column nobody notices.</td>
+  </tr>
+  <tr>
+    <td><b>React 18</b></td>
+    <td>The 13 views and 10 shared components</td>
+    <td>Views share one context object and recompute with <code>useMemo</code>, so switching a filter re-derives in memory with no server round trip.</td>
+  </tr>
+  <tr>
+    <td><b>Recharts</b></td>
+    <td>Every chart: bars, lines, stacked areas, prediction bands</td>
+    <td>Composes into React and reads colours from the live theme, so all three themes work without a second chart config.</td>
+  </tr>
+  <tr>
+    <td><b>Papaparse</b></td>
+    <td>Reading the CSV files server-side</td>
+    <td>Handles quoted fields and embedded commas correctly. A hand-written split on commas breaks the first time a campaign name contains one.</td>
+  </tr>
+  <tr>
+    <td><b>Python 3.10</b><br><span class="muted">numpy, pandas</span></td>
+    <td>Data preparation inside the training script</td>
+    <td>The vector operations the model fitting needs are native here.</td>
+  </tr>
+  <tr>
+    <td><b>scikit-learn</b></td>
+    <td>All six models: logistic regression, gradient boosting, Ridge</td>
+    <td>Standard, inspectable implementations. Coefficients can be exported and re-scored elsewhere, which is what the next row depends on.</td>
+  </tr>
+  <tr>
+    <td><b>Google Gemini</b><br><span class="muted">2.5 Flash</span></td>
+    <td>The AI Analyst view</td>
+    <td>Receives aggregated totals only — never raw rows — and is instructed to answer from them or say it cannot.</td>
+  </tr>
+  <tr>
+    <td><b>CSS custom properties</b></td>
+    <td>Three themes from a single stylesheet</td>
+    <td>Theme values are written to the document root, so one stylesheet covers all three instead of three sets of classes.</td>
+  </tr>
+  <tr>
+    <td><b>Vercel</b></td>
+    <td>Hosting and deployment</td>
+    <td>Builds directly from the repository. API routes become serverless functions.</td>
+  </tr>
+</table>
+
+<div class="note">
+<b>The decision worth explaining.</b> Models are <b>trained in Python</b> but
+<b>scored in TypeScript</b>. The training script writes coefficients, scaler parameters
+and category reference levels to one JSON file; the web application reads that file and
+computes predictions itself. So no Python process runs in production, the interactive
+scorer responds with no network call, and hosting stays a static Node deployment. The
+training script verifies its own export against <code>sklearn.predict_proba</code> to
+within 1e-9 on held-out rows before writing the file, so the two paths cannot drift.
+</div>
+</div>
+
+<!-- ============================ 4 ============================ -->
+<div class="page">
+<h2>4 · How data flows</h2>
+
+<pre>  scripts/generate.mjs          simulate the campaign, then aggregate it
+          │
+          ├──────────────►  data/*.csv              6 files, 193,000 rows
+          │                        │
+          │                        ▼
+          │                 lib/csv.ts              typed loaders, parsed once per process
+          │                        │
+          │                        ▼
+          │                 lib/data.ts             ratios, slicing, movers, anomalies
+          │                        │
+          │                        ▼
+          │                 app/api/*  ──────────►  13 React views
+          │                        ▲
+          ▼                        │
+  ml/train.py  ──►  ml/models/bundle.json  ──►  lib/ml.ts   scored in the browser</pre>
+
+<h3>Three rules that hold it together</h3>
+
+<h4>One simulation produces both the reporting and the training data</h4>
+<p>The generator simulates the campaign once, then writes both the aggregated reporting levels and the session-level training sample from that same pass. The dashboard totals and the model training set therefore cannot disagree with each other.</p>
+
+<h4>No view does its own arithmetic</h4>
+<p>All derivation lives in <code>lib/data.ts</code>. Ratios are computed from summed numerators and denominators, never averaged from per-day ratios — because the mean of daily conversion rates is not the conversion rate, and that mistake produces numbers that look plausible and are wrong.</p>
+
+<h4>Dates are ISO everywhere</h4>
+<p>Every date is <code>YYYY-MM-DD</code> from the moment it is loaded, so sorting text sorts chronologically. Loaders normalise any other format on the way in. In <code>DD/MM/YYYY</code> form, text sorting puts 9 August after 18 August, and every trend chart in the application would be silently wrong.</p>
+
+<h3>The eight endpoints</h3>
+<table>
+  <tr><th>Endpoint</th><th>Returns</th><th class="r">Size</th></tr>
+  <tr><td><code>/api/data</code></td><td>The full funnel table, packed</td><td class="r">2.61 MB</td></tr>
+  <tr><td><code>/api/meta</code></td><td>Meta rows: campaign × ad set × creative × city</td><td class="r">1.14 MB</td></tr>
+  <tr><td><code>/api/google</code></td><td>Google rows: campaign × city</td><td class="r">0.37 MB</td></tr>
+  <tr><td><code>/api/linkedin</code></td><td>LinkedIn rows: campaign × audience × city</td><td class="r">0.12 MB</td></tr>
+  <tr><td><code>/api/print</code></td><td>Print insertions</td><td class="r">0.01 MB</td></tr>
+  <tr><td><code>/api/ml</code></td><td>All six trained models</td><td class="r">0.12 MB</td></tr>
+  <tr><td><code>/api/quality</code></td><td>Six data-quality checks, run live</td><td class="r">0.01 MB</td></tr>
+  <tr><td><code>/api/chat</code></td><td>AI Analyst answer <span class="tag">POST</span></td><td class="r">—</td></tr>
+</table>
+</div>
+
+<!-- ============================ 5 ============================ -->
+<div class="page">
+<h2>5 · The dataset</h2>
+
+<p>The data is simulated. <code>scripts/generate.mjs</code> runs a seeded simulation of an advertising auction, a registration funnel and a ticket price ladder, then aggregates the outcome into 22 reporting levels and draws an 80,000-row session sample for model training. Seed <code>20260823</code>, so rebuilding reproduces the identical dataset.</p>
+
+<table>
+  <tr><th>File</th><th class="r">Rows</th><th>One row is</th></tr>
+  <tr><td><code>funnel_daily.csv</code></td><td class="r">76,453</td><td>one day × one reporting level × one entity</td></tr>
+  <tr><td><code>meta_ads_daily.csv</code></td><td class="r">23,892</td><td>day × campaign × ad set × creative × city</td></tr>
+  <tr><td><code>google_ads_daily.csv</code></td><td class="r">9,504</td><td>day × campaign × city</td></tr>
+  <tr><td><code>linkedin_ads_daily.csv</code></td><td class="r">3,480</td><td>day × campaign × audience × city</td></tr>
+  <tr><td><code>print_ads_daily.csv</code></td><td class="r">128</td><td>one newspaper insertion</td></tr>
+  <tr><td><code>sessions.csv</code></td><td class="r">79,996</td><td>one website session, with its outcome</td></tr>
+</table>
+
+<h3>What the season looks like</h3>
+<pre>channel     spend L  mix%     landed    regs   GTV Cr    CPC    CAC   ROAS
+Meta          124.0  45.4   9,92,760  18,678     3.43   12.5    664  2.77x
+Google        107.2  39.3   8,55,690  26,580     4.94   12.5    403  4.61x
+Print          22.2   8.1     32,006     268     0.05   69.3   8270  0.23x
+LinkedIn       19.7   7.2     25,250     352     0.07   77.8   5583  0.34x
+Organic          -      -   5,03,381  15,361     2.85      -      -      -
+Email            -      -   1,65,665   6,621     1.22      -      -      -
+Referral         -      -   1,14,991   2,824     0.53      -      -      -
+Affiliate        -      -   1,01,596   1,641     0.31      -      -      -
+
+landed 27,91,339  ->  leads 3,24,087  ->  pay 1,26,651  ->  registrations 72,325
+GTV Rs 13.40 Cr on Rs 2.73 Cr paid spend        average order value Rs 1,853
+funnel 11.6%  ->  39.1%  ->  57.1%              landed to registration 2.59%
+blended ROAS 4.91x                              paid-only ROAS 3.11x</pre>
+
+<h3>What the simulation models</h3>
+<div class="grid2">
+<ul class="kv">
+  <li>Weekly seasonality — weekends browse, Mondays are quiet</li>
+  <li>An exponential demand ramp into race day</li>
+  <li>Four price-rise deadlines, each producing a spike</li>
+  <li>Creative fatigue, at a different rate per asset type</li>
+</ul>
+<ul class="kv">
+  <li>City income skew affecting ticket choice</li>
+  <li>An eight-rung ticket price ladder</li>
+  <li>Advertising auction saturation</li>
+  <li>Budget pacing drift, independent of demand</li>
+</ul>
+</div>
+
+<div class="note">
+<b>The last two are not decoration.</b> <b>Auction saturation</b> raises the effective cost
+per thousand impressions as daily spend rises, so registrations grow like
+<code>spend^0.8</code> rather than in a straight line. Without it, the true spend
+elasticity is exactly 1.0 and the response curves in section 7 would have nothing to
+measure. <b>Pacing drift</b> is a random walk on each channel's daily budget, independent
+of demand; without it, spend is a fixed function of the demand index and perfectly
+correlated with the trend controls, which makes the elasticity statistically
+unidentifiable — the regression cannot separate the effect of spending more from the
+effect of the calendar.
+</div>
+</div>
+
+<!-- ============================ 6 · VIEWS ============================ -->
+<div class="page">
+<h2>6 · The thirteen views</h2>
+<p class="lede">Each view, what it is for, and the one thing it is designed to make visible.</p>
+
+<h3>6.1 Overall</h3>
+<p>The blended picture: eight headline figures, the daily trend, the full funnel, and where spend went against where revenue came from.</p>
+<p><b>Its point:</b> blended ROAS (4.91×) counts organic, email and referral revenue against paid spend. Paid channels alone returned 3.11×. Both are shown, because quoting the blended figure as media performance flatters the buy by more than half.</p>
+<div class="shot"><img src="shots/overall.png" alt="Overall view"><div class="cap">Overall — headline metrics, daily registrations and revenue, funnel, and spend against revenue share.</div></div>
+</div>
+
+<div class="page">
+<h3>6.2 Meta Ads</h3>
+<p>Drill-down through campaign, ad set, creative, creative type, objective and city, with click-through rate, cost per click, cost per thousand impressions, and cost per acquisition on every row.</p>
+<p><b>Its point:</b> the creative fatigue chart plots click-through rate against <i>days on air</i> rather than against the calendar, so assets launched months apart are directly comparable and a decaying creative is obvious.</p>
+<div class="shot"><img src="shots/meta.png" alt="Meta Ads view"><div class="cap">Meta Ads — spend and click cost over time, a six-dimension drill-down, and creative fatigue by asset age.</div></div>
+</div>
+
+<div class="page">
+<h3>6.3 Google Ads</h3>
+<p>Performance by campaign type — brand search, generic search, Performance Max, display, YouTube, discovery.</p>
+<p><b>Its point:</b> brand search converts people who were already searching for the event by name, so its return is enormous and it lifts the whole channel average with it. The view reports Google's ROAS both with and without brand search, because only the second number should influence a decision to spend more.</p>
+<div class="shot"><img src="shots/google.png" alt="Google Ads view"><div class="cap">Google Ads — brand search isolated from everything else, then campaign type and campaign-by-city detail.</div></div>
+</div>
+
+<div class="page">
+<h3>6.4 LinkedIn Ads</h3>
+<p>A business-to-business buy aimed at corporate team registrations, across five audience segments.</p>
+<p><b>Its point:</b> LinkedIn ran as two short bursts rather than continuously, and the view detects those flights from the data itself rather than having the dates written in. At ₹77.8 per click against roughly ₹12.5 on the other channels, it is the most expensive traffic in the account, and the view says so.</p>
+<div class="shot"><img src="shots/linkedin.png" alt="LinkedIn Ads view"><div class="cap">LinkedIn Ads — the two detected flights compared, then audience, campaign and city breakdowns.</div></div>
+</div>
+
+<div class="page">
+<h3>6.5 Print Ads</h3>
+<p>Newspaper insertions by publication, slot size and city.</p>
+<p><b>Its point:</b> a newspaper advertisement has no click. The only tracked path from print to a registration is a QR code, which catches a tiny fraction of the people who saw it — everyone who read the ad and later searched the event by name is recorded as Google or Organic. So the view treats the tracked return as a <i>floor</i>, not a measurement, and judges the channel on cost per thousand reach instead.</p>
+<div class="shot"><img src="shots/print.png" alt="Print Ads view"><div class="cap">Print Ads — spend against estimated reach by publication, and the full insertion schedule.</div></div>
+</div>
+
+<div class="page">
+<h3>6.6 Marketing Mix</h3>
+<p>All eight channels side by side on a metric the reader chooses, with a full comparison table.</p>
+<p><b>Its point:</b> the table is sorted by the gap between a channel's share of revenue and its share of spend. A channel taking 8% of the budget and returning 0.4% of revenue is visible immediately.</p>
+<div class="shot"><img src="shots/marketing.png" alt="Marketing Mix view"><div class="cap">Marketing Mix — every channel on one metric, efficiency against scale, and the spend-versus-revenue share gap.</div></div>
+</div>
+
+<div class="page">
+<h3>6.7 City wise</h3>
+<p>Six cities, with every funnel step reported separately rather than collapsed into one conversion rate.</p>
+<p><b>Its point:</b> a city can look acceptable on overall conversion while failing badly at one specific step. Separating the steps localises the problem — a lead-stage gap is a form or offer issue, a payment-stage gap is usually price or checkout friction.</p>
+<div class="shot"><img src="shots/city.png" alt="City wise view"><div class="cap">City wise — stacked daily registrations, a full comparison table, and a funnel breakdown per city.</div></div>
+</div>
+
+<div class="page">
+<h3>6.8 Ticket Mix</h3>
+<p>The eight ticket types, from ₹499 to ₹6,499, by volume and by revenue.</p>
+<p><b>Its point:</b> the cheapest ticket dominates the registration count while the expensive ones dominate revenue per head, so a registrations target and a revenue target can move in opposite directions. The view also shows how the mix shifts as race day approaches.</p>
+<div class="shot"><img src="shots/product.png" alt="Ticket Mix view"><div class="cap">Ticket Mix — volume against revenue per ticket, mix by city, and how the mix moves toward race day.</div></div>
+</div>
+
+<div class="page">
+<h3>6.9 Analysis</h3>
+<p>The diagnostic view: biggest movers, funnel diagnostics, an anomaly scan, and an efficiency quadrant.</p>
+<p><b>Its point:</b> movers are ranked by <i>absolute</i> change, not percentage. A 400% jump on two registrations is noise, and ranking by percentage puts that at the top of the list every single week.</p>
+<div class="shot"><img src="shots/analysis.png" alt="Analysis view"><div class="cap">Analysis — movers with status flags, per-entity funnel diagnostics against the median, and an anomaly scan.</div></div>
+</div>
+
+<div class="page">
+<h3>6.10 Forecast</h3>
+<p>A projection of registrations, revenue, traffic and spend through to race day, with prediction intervals.</p>
+<p><b>Its point:</b> the error of a naive baseline is printed directly beside the model's own error. A forecast that cannot beat "assume next week looks like last week" is not worth acting on, and the reader should be able to see that without taking it on trust.</p>
+<div class="shot"><img src="shots/forecast.png" alt="Forecast view"><div class="cap">Forecast — actuals, fit and projection with a 95% band, backtest results, and a day-by-day table to race day.</div></div>
+</div>
+
+<div class="page">
+<h3>6.11 ML Lab</h3>
+<p>The modelling work presented for inspection: held-out metrics, a confusion matrix, a calibration curve, the largest effects as odds ratios, a live scorer, the response curves, and the budget optimiser.</p>
+<p><b>Its point:</b> the scorer is interactive. Change the channel, city, device or session depth and the predicted probability updates immediately, computed from the exported coefficients rather than from a stored lookup.</p>
+<div class="shot"><img src="shots/ml.png" alt="ML Lab view"><div class="cap">ML Lab — model card with baselines, calibration, the twelve largest effects as odds ratios, and the live scorer.</div></div>
+</div>
+
+<div class="page">
+<h3>6.12 Data Quality</h3>
+<p>Six checks run live on every load, plus the reconciliation figures and the two known tracking faults.</p>
+<p><b>Its point:</b> every check prints what it expected next to what it measured, so a green tick can be judged instead of trusted. And the system is required to keep catching two faults that are already known — a monitor that cannot prove a catch on a fault you know about is not worth trusting on one you do not.</p>
+<div class="shot"><img src="shots/quality.png" alt="Data Quality view"><div class="cap">Data Quality — six checks with expected against measured, reconciliation with tolerances, and the two known faults.</div></div>
+</div>
+
+<div class="page">
+<h3>6.13 AI Analyst</h3>
+<p>Natural-language questions answered from the season's aggregate figures.</p>
+<p><b>Its point:</b> the model is given totals, rates and top-ten lists — never raw rows — and is instructed to answer only from those and to say plainly when the answer is not there. It cannot invent a number it was not given, and it cannot answer about one individual session.</p>
+<div class="shot"><img src="shots/chatbot.png" alt="AI Analyst view"><div class="cap">AI Analyst — suggested starting questions, and answers grounded in the supplied aggregates.</div></div>
+</div>
+
+<!-- ============================ 7 ============================ -->
+<div class="page">
+<h2>7 · The models</h2>
+<p class="lede">Six models, fitted by <code>ml/train.py</code>. Every number below is measured on data the model never saw during training.</p>
+
+<h3>7.1 and 7.2 — Will this visitor register? Will they submit a lead?</h3>
+<p>Two logistic regressions over 13 features: seven numeric (days to race day, session depth, time on page, prior visits, ticket price, returning visitor, weekend) and six categorical (channel, city, device, creative type, price tier, campaign objective).</p>
+
+<table>
+  <tr><th>Target</th><th class="r">ROC AUC</th><th class="r">Avg precision</th><th class="r">Brier</th><th class="r">Gradient boosting</th></tr>
+  <tr><td>Registered <span class="muted">(3.0% base rate)</span></td><td class="r"><b>0.6464</b></td><td class="r">0.0583</td><td class="r">0.0332</td><td class="r">0.6343</td></tr>
+  <tr><td>Submitted a lead</td><td class="r"><b>0.6173</b></td><td class="r">0.2002</td><td class="r">—</td><td class="r">0.5981</td></tr>
+</table>
+
+<h4>The split is by date, not random</h4>
+<p>Training uses the first 80% of the season and testing the last 20%. A random split would place sessions from the same day on both sides; since demand on a given day drives conversion on that day, the model would effectively be told the answer, and the reported accuracy would be inflated.</p>
+
+<h4>Class weighting was deliberately removed</h4>
+<p>Balancing a 3% positive rate is the textbook reflex and it was wrong here. It shifts the intercept so far that the model's average predicted probability becomes 48% against an actual rate of 3.5% — the ranking stays fine, but every percentage the interface displays becomes meaningless, and the Brier score degrades from 0.033 to 0.244. Removing it costs 0.0016 of AUC and produces calibrated output. The calibration curve in ML Lab now tracks the diagonal: the lowest decile predicts 0.83% against an observed 1.11%, the highest predicts 6.54% against 6.75%.</p>
+
+<h3>7.3 — How does the season finish?</h3>
+<p>Ridge regression on <code>log1p</code> of each series, with a linear trend, a race-day proximity ramp, Fourier terms at a weekly period, day-of-week indicators, and the values from one day and seven days earlier. Multi-step predictions are recursive, so the model builds on its own output rather than on actual values it will not have.</p>
+
+<table>
+  <tr><th>Series</th><th class="r">Model error</th><th class="r">Naive baseline</th><th>Verdict</th></tr>
+  <tr><td>Registrations</td><td class="r"><b>16.1%</b></td><td class="r">20.0%</td><td>beats the baseline</td></tr>
+  <tr><td>Revenue</td><td class="r"><b>16.9%</b></td><td class="r">20.8%</td><td>beats the baseline</td></tr>
+  <tr><td>Spend</td><td class="r"><b>15.4%</b></td><td class="r">19.0%</td><td>beats the baseline</td></tr>
+  <tr><td>Traffic</td><td class="r">10.4%</td><td class="r">10.2%</td><td>a tie, reported as one</td></tr>
+</table>
+
+<p>Error is mean absolute percentage error over five rolling-origin folds with a seven-day horizon, refitting at each origin. The seven-day lag term is included on purpose: the naive baseline <i>is</i> a seven-day lag, so a model that leaves it out can only beat that baseline by luck.</p>
+
+<h3>7.4 — What does the next rupee buy?</h3>
+<p>A curve of the form <code>registrations = a × spend^b</code> fitted per channel, holding trend, race-day proximity and day of week constant.</p>
+
+<table>
+  <tr><th>Channel</th><th class="r">Elasticity</th><th class="r">Fit quality</th><th class="r">Average CPA</th><th class="r">Marginal CPA</th></tr>
+  <tr><td>Meta</td><td class="r">0.933</td><td class="r">0.889</td><td class="r">₹471</td><td class="r">₹505</td></tr>
+  <tr><td>Google</td><td class="r">0.820</td><td class="r">0.797</td><td class="r">₹316</td><td class="r">₹385</td></tr>
+  <tr><td>LinkedIn</td><td class="r">0.950</td><td class="r">0.388</td><td class="r">₹4,607</td><td class="r">₹4,850</td></tr>
+  <tr><td>Print</td><td class="r">0.950</td><td class="r">0.645</td><td class="r">₹6,802</td><td class="r">₹7,160</td></tr>
+</table>
+
+<div class="warn note">
+<b>Why the demand controls matter.</b> Fitting spend against registrations on its own
+returns an elasticity of <b>1.88</b> for Google — meaning each additional rupee buys
+<i>more</i> than the one before it, which no advertising auction can do. It is a textbook
+omitted-variable problem: budgets rise as the event approaches and so does organic demand,
+so the regression credits the spending for what the calendar was doing. Acting on that
+number would have moved the entire budget into one channel for an imaginary gain.
+</div>
+
+<p><b>Marginal, not average.</b> Average cost per acquisition describes money already spent. The cost of the <i>next</i> registration is the only figure a budget decision can use, and on a curve with diminishing returns the two are different.</p>
+
+<h3>7.5 — Where should the budget go?</h3>
+<p>The optimiser holds total daily spend fixed and moves it ₹1,000 at a time toward whichever channel currently has the lowest marginal cost per registration. Each channel is floored at 20% and capped at 250% of its current spend, because bidding and creative both need time to re-learn and a channel taken to zero loses its accumulated audience data. A curve fitting worse than 0.25 is not permitted to receive additional budget at all.</p>
+<p><b>Result:</b> +38.1% more registrations per day at the same total spend — Print down 79%, Meta down 79%, LinkedIn down 80%, Google up 89%.</p>
+
+<h3>7.6 — What broke, and when?</h3>
+<p>A robust outlier score using the median absolute deviation, computed on each day's ratio to a 31-day centred rolling median.</p>
+<ul>
+  <li><b>Median absolute deviation rather than standard deviation</b>, because a single large spike inflates the standard deviation enough to push its own score back under the threshold — which is exactly how bad data survives in a dataset for weeks.</li>
+  <li><b>Detrended</b>, because this season ramps steeply into race day, and an untreated score on a rising series simply flags the rise. The first version of this detector found race week and missed a genuine three-day tracking failure in May entirely.</li>
+  <li><b>A 31-day window</b>, sized against the shortest fault worth catching. Inside a 15-day window, an eight-day incident is more than half the baseline and drags the median up along with itself, hiding the fault.</li>
+</ul>
+</div>
+
+<!-- ============================ 8 ============================ -->
+<div class="page">
+<h2>8 · Data quality</h2>
+<p class="lede">Six checks run on every request. Each reports what it expected alongside what it actually measured.</p>
+
+<table>
+  <tr><th>Check</th><th>What it proves</th><th class="r">Result</th></tr>
+  <tr><td>Channel totals sum to the overall total, every day, on four metrics</td><td>No traffic or revenue is double counted or lost between levels</td><td class="r">pass · 0 mismatches</td></tr>
+  <tr><td>All seven city levels roll up to their parent, and every parent key resolves</td><td>No drill-down is silently empty</td><td class="r">pass · 0 orphans</td></tr>
+  <tr><td>Each channel's own reporting reconciles to the funnel table</td><td>Two independent paths to the same number agree</td><td class="r">pass · worst 0.00016%</td></tr>
+  <tr><td>Every day of the season present, nothing outside it</td><td>No missing days quietly depressing a total</td><td class="r">pass · 172 days</td></tr>
+  <tr><td>No negatives; registrations ≤ payments ≤ leads ≤ visits, daily</td><td>The funnel cannot widen as it descends</td><td class="r">pass</td></tr>
+  <tr><td>Two known tracking faults still detected</td><td>The monitoring still works</td><td class="r">2 of 2 found</td></tr>
+</table>
+
+<div class="note">
+<b>The second check is subtler than it looks.</b> Every child row names its parent by a
+text key. If that key stops matching an entity at the level above — a renamed campaign, a
+changed separator — the child rows simply stop appearing under their parent. Nothing
+raises an error, no total changes, and a drill-down that used to show twelve campaigns now
+shows none. It is the kind of fault that survives for months because everything looks
+fine.
+</div>
+
+<h3>The two known faults</h3>
+<table>
+  <tr><th style="width:26%">Fault</th><th style="width:16%">Window</th><th>Measured evidence</th></tr>
+  <tr>
+    <td>Lead tracking stopped firing on Google traffic</td>
+    <td>18–20 May</td>
+    <td>Visit-to-lead rate fell to <b>3.8%</b> against a season median of 12.4%, while visits held steady. Traffic arriving normally but no leads recorded is a tracking failure, not a media problem — and the distinction decides whether anyone should touch the campaign.</td>
+  </tr>
+  <tr>
+    <td>An automated crawler inflated organic traffic in Hyderabad</td>
+    <td>25 Jun – 2 Jul</td>
+    <td>Median daily visits rose from <b>365 to 912</b> (2.50×) while the visit-to-registration rate collapsed from <b>2.75% to 0.34%</b>. Volume with no intent behind it, which understates every conversion rate for that city while it is included.</td>
+  </tr>
+</table>
+</div>
+
+<!-- ============================ 9 ============================ -->
+<div class="page">
+<h2>9 · Engineering decisions</h2>
+<p class="lede">Four problems that shaped the implementation, and what was done about each.</p>
+
+<h3>9.1 The API responses were too large to deploy</h3>
+<p>The funnel table is 76,453 rows that repeat the same 172 dates, 22 level names and 667 entity names over and over. Serialised as a list of objects, that is <b>17.33 MB</b> — and a serverless function may return at most 4.5 MB, so the deployed application would have failed on its very first request.</p>
+<p><b>Solution.</b> Each repeated text value is stored once in a dictionary and referenced by position, and each row is sent as a plain list of numbers rather than a labelled object. The browser rebuilds the original rows on arrival. No information is lost.</p>
+<table>
+  <tr><th>Endpoint</th><th class="r">Before</th><th class="r">After</th><th class="r">Reduction</th></tr>
+  <tr><td><code>/api/data</code></td><td class="r">17.33 MB</td><td class="r">2.61 MB</td><td class="r">85%</td></tr>
+  <tr><td><code>/api/meta</code></td><td class="r">8.48 MB</td><td class="r">1.14 MB</td><td class="r">87%</td></tr>
+  <tr><td><code>/api/google</code></td><td class="r">2.17 MB</td><td class="r">0.37 MB</td><td class="r">83%</td></tr>
+  <tr><td><code>/api/linkedin</code></td><td class="r">0.86 MB</td><td class="r">0.12 MB</td><td class="r">86%</td></tr>
+</table>
+
+<h3>9.2 The response curves reported impossible economics</h3>
+<p>Covered in section 7.4. Fitting spend against registrations without demand controls returned an elasticity above 1 for Google, implying increasing returns to advertising. Adding trend, race-day proximity and day-of-week controls brought every channel into the plausible 0.82–0.95 range.</p>
+
+<h3>9.3 The anomaly detector found the wrong things</h3>
+<p>Covered in section 7.6. The first version scored raw daily values and flagged race week — the campaign working as intended — while missing a real three-day tracking failure. Detrending against a rolling median, and widening the window to 31 days, fixed both.</p>
+
+<h3>9.4 The forecast lost to doing nothing</h3>
+<p>The first specification had no race-day ramp and no lag terms, and scored 35.8% error against a naive baseline's 17.5%. Registrations for a dated event do not grow in a straight line; they surge in the final fortnight. Adding an explicit proximity ramp and the seven-day lag brought the model ahead of the baseline on three of four series.</p>
+
+<div class="note">
+The common thread: in all four cases the first implementation produced output that looked
+plausible. The response curve gave a confident number, the detector returned a full list
+of anomalies, the forecast drew a smooth line. Each was caught by checking the result
+against something external — an economic constraint, a fault whose dates were already
+known, a naive baseline — rather than by reading the code again.
+</div>
+</div>
+
+<!-- ============================ 10 ============================ -->
+<div class="page">
+<h2>10 · File map</h2>
+
+<table>
+  <tr><th style="width:27%">Path</th><th>Responsibility</th></tr>
+  <tr><td><code>app/page.tsx</code></td><td>Owns all application state — date range, city filter, active view — and builds the single context object every view receives.</td></tr>
+  <tr><td><code>app/layout.tsx</code></td><td>Document shell, metadata, theme provider.</td></tr>
+  <tr><td><code>app/globals.css</code></td><td>The entire design system, written against CSS variables so three themes work from one file.</td></tr>
+  <tr><td><code>app/api/*/route.ts</code></td><td>Eight server endpoints. None throws: a failure returns a readable message so the interface degrades instead of blanking.</td></tr>
+  <tr><td><code>lib/types.ts</code></td><td>Every shared shape. The contract both the server and the views compile against.</td></tr>
+  <tr><td><code>lib/csv.ts</code></td><td>Server-only loaders. Each file is parsed once and cached for the process lifetime.</td></tr>
+  <tr><td><code>lib/data.ts</code></td><td>All derivation: totals, ratios, slicing by level and city, movers, rolling means, robust outlier scores.</td></tr>
+  <tr><td><code>lib/pack.ts</code></td><td>The compact wire format from section 9.1. Encoder and decoder live together so they cannot drift apart.</td></tr>
+  <tr><td><code>lib/ml.ts</code></td><td>Scores the exported model coefficients in the browser. Also the response-curve maths.</td></tr>
+  <tr><td><code>lib/quality.ts</code></td><td>The six data-quality checks.</td></tr>
+  <tr><td><code>lib/tabkit.ts</code></td><td>Helpers shared across views so thirteen files do not each reimplement the same aggregation.</td></tr>
+  <tr><td><code>lib/theme.tsx</code></td><td>Theme state, persisted, written to the document root as CSS variables.</td></tr>
+  <tr><td><code>lib/format.ts</code></td><td>Indian-numbering formatters. Every displayed number passes through one of these.</td></tr>
+  <tr><td><code>components/</code></td><td>Ten shared components — table, chart, funnel, metric cards, and so on.</td></tr>
+  <tr><td><code>components/tabs/</code></td><td>One file per view, thirteen in total.</td></tr>
+  <tr><td><code>scripts/generate.mjs</code></td><td>The simulation. Produces every CSV.</td></tr>
+  <tr><td><code>scripts/config.mjs</code></td><td>The world definition: cities, channels, campaigns, publications, tickets.</td></tr>
+  <tr><td><code>ml/train.py</code></td><td>Fits all six models and exports them as one JSON file.</td></tr>
+  <tr><td><code>ml/models/bundle.json</code></td><td>The exported models the application reads.</td></tr>
+</table>
+
+<h3>Deployment</h3>
+<p>The repository is connected to Vercel. A push to <code>main</code> triggers a build; the API routes become serverless functions and the interface is served from the edge. Environment values, including the Gemini key, are stored encrypted in the hosting project and are never committed to the repository.</p>
+</div>
+
+<!-- ============================ 11 ============================ -->
+<div class="page">
+<h2>11 · Limitations</h2>
+<p class="lede">What this project does not establish, stated plainly.</p>
+
+<h4>The response curves show association, not causation</h4>
+<p>They are fitted on spending that was chosen by a marketing team, not assigned by an experiment. Demand controls remove the most obvious confounder but cannot remove all of them. The optimiser's +38% is what the fitted relationship implies if it holds, not a promised outcome. Establishing causality would require deliberately randomised spend — a geographic holdout test or a budget split experiment.</p>
+
+<h4>Attribution is last-touch throughout</h4>
+<p>A registration is credited to the last channel the visitor came through. Print's near-zero measured return is a direct consequence of that rule, not a measurement of what print achieved: a reader who saw a newspaper advertisement and later searched the event by name is recorded as Google. Any channel bought for awareness is systematically undercounted by this method.</p>
+
+<h4>The propensity model is a ranking tool, not a decision tool</h4>
+<p>An AUC of 0.6464 on a 3% base rate is genuine signal, and the calibration is good. It is not a strong classifier. It is suitable for ordering audiences by likelihood — the top decile converts about twice the base rate — and unsuitable for a confident judgement about any one individual visitor.</p>
+
+<h4>The forecast interval describes past error, not future risk</h4>
+<p>The band is derived from how wrong this model has been historically on this series. It does not account for anything that has not happened before — a competing event, a weather cancellation, a payment gateway failing during the final week.</p>
+
+<h4>The data is simulated</h4>
+<p>It is realistic because the generative process is explicit and the resulting funnel rates, click costs and channel economics fall in plausible ranges. But nothing here validates the simulation against a real advertising account. The engineering, the modelling method and the quality checks are what the project demonstrates.</p>
+
+<hr style="border:0;border-top:1px solid #dbe6e6;margin:22px 0 12px">
+<p class="muted" style="font-size:9pt">
+RunPulse Analytics · runpulse-bhargavi-aitwade-mit-wpu-capstone.vercel.app ·
+github.com/shashanx52/runpulse-analytics
+</p>
+</div>
+
+</body>
+</html>
