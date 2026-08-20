@@ -155,10 +155,9 @@ export async function POST(req: Request) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
     return NextResponse.json({
-      reply:
-        "The AI Analyst needs a Gemini API key. Add GEMINI_API_KEY to .env.local and " +
-        "restart the server. Every other tab is unaffected.",
+      reply: "This view needs a Gemini API key to be configured. Every other view is unaffected.",
       degraded: true,
+      reason: "NO_KEY",
     });
   }
 
@@ -179,12 +178,30 @@ export async function POST(req: Request) {
     const res = await chat.sendMessage(last);
     return NextResponse.json({ reply: res.response.text() });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({
-      reply:
-        "Gemini rejected the request: " + msg + ". The key in .env.local may be invalid " +
-        "or out of quota. The rest of the dashboard is unaffected.",
-      degraded: true,
-    });
+    // The SDK error is a wall of JSON with a stack trace in it. Useful in a log, wrong in
+    // a user interface: classify it into something a reader can act on and keep the raw
+    // text in a separate field for anyone debugging.
+    const raw = e instanceof Error ? e.message : String(e);
+    let reply =
+      "The language model could not be reached. Every other view reads the data directly " +
+      "and is unaffected.";
+    let reason = "UPSTREAM_ERROR";
+    if (/API_KEY_INVALID|API key not valid/i.test(raw)) {
+      reply =
+        "The configured API key was rejected. It needs to be replaced with a valid Gemini " +
+        "key for this view to work. Every other view is unaffected.";
+      reason = "KEY_REJECTED";
+    } else if (/RESOURCE_EXHAUSTED|quota|429/i.test(raw)) {
+      reply =
+        "The API quota for this key has been used up. It will reset, or a key with more " +
+        "headroom can be configured. Every other view is unaffected.";
+      reason = "QUOTA";
+    } else if (/PERMISSION_DENIED|403/i.test(raw)) {
+      reply =
+        "The API key exists but is not permitted to call this model. Every other view is " +
+        "unaffected.";
+      reason = "FORBIDDEN";
+    }
+    return NextResponse.json({ reply, degraded: true, reason, detail: raw.slice(0, 400) });
   }
 }

@@ -83,10 +83,16 @@ export default function ChatbotTab() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: next }),
       });
-      const j = (await res.json()) as { reply: string; degraded?: boolean };
-      if (j.degraded) setDegraded(j.reply);
-      else setDegraded(null);
-      setMsgs([...next, { role: "assistant", content: j.reply }]);
+      const j = (await res.json()) as { reply: string; degraded?: boolean; reason?: string };
+      if (j.degraded) {
+        // A configuration failure is not an answer, so it goes in the notice above the
+        // thread rather than being dressed up as a reply from the analyst.
+        setDegraded(j.reply);
+        setMsgs(next);
+      } else {
+        setDegraded(null);
+        setMsgs([...next, { role: "assistant", content: j.reply }]);
+      }
     } catch (e) {
       setMsgs([
         ...next,
@@ -100,7 +106,7 @@ export default function ChatbotTab() {
   return (
     <div className="stack">
       {degraded ? (
-        <Callout tone="warn" title="The AI Analyst is not available">
+        <Callout tone="warn" title="This view is not available">
           {degraded}
         </Callout>
       ) : null}
