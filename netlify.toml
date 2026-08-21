@@ -12,6 +12,9 @@
 [build.environment]
   # next build needs more than the default heap for a dataset this size
   NODE_OPTIONS = "--max-old-space-size=4096"
+  # `netlify deploy --build` builds on the local machine, which may be memory-starved,
+  # so serialise static generation. Costs a little time and never crashes.
+  LOWMEM = "1"
   NODE_VERSION = "20"
 
 [[plugins]]
